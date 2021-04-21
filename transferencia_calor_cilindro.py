@@ -7,11 +7,15 @@ import os
 
 T_lims_list = []
 
-kelvin = 273.15
-current_directory = os.getcwd()
 
-def conv_k(t):
-    return t + kelvin
+current_directory = os.getcwd()
+options = '\n\n1.- Sí \n0.- No \n\nTeclea la opcion deseda: '
+
+
+def convertir_kelvin(t):
+    kelvin = 273.15
+    t = t + kelvin 
+    return t 
 
 
 
@@ -30,33 +34,32 @@ folder_imgs = os.path.join(dia_path, r'imgs')
 os.makedirs(folder_imgs) 
 
 
-options = '\n\n1.- Sí \n0.- No \n\nTeclea la opcion deseda: '
 dia = str(date.datetime.now().strftime("%Y_%m_%d_%H_%M_%S"))
 
-def err_valor_numerico():
-    print(' ***ERROR*** \nTu tipo de dato no es válido \nDebes ingresar solo caracteres numericos.')
-    
 def loading_text(texto):
     for i in range(len(texto)):
-        print(texto[i], sep=' ', end=' ', flush=True)
-        time.sleep(0.2)
+        print(texto[i], sep='', end=' ', flush=True)
+        time.sleep(0.01)
 
-def error_msj():
-    print('\n***** ERROR *****\n')
+def mensaje_error():
+    loading_text('\n***** ERROR *****\n')
     time.sleep(1)
+
+def err_valor_numerico():
+    mensaje_error()
+    loading_text('\nTu tipo de dato no es válido \nDebes ingresar solo caracteres numericos.')
 
 def zero_error():
-    error_msj()
-    print('\nEl valor no puede ser cero')
+    mensaje_error()
+    loading_text('\nEl valor no puede ser cero\n')
     time.sleep(1)
-    print('\nIntenta nuevamente')
+    loading_text('\n***** Intenta nuevamente *****\n')
     time.sleep(1)
 
 def negative_error():
-    error_msj()
-    print('\nIngresa solo valores positivos \nIntenta nuevamente')
+    mensaje_error()    
+    loading_text('\nIngresa solo valores positivos \nIntenta nuevamente\n')
     time.sleep(1)
-
 
 def dots():
     dots = '\n....\n'
@@ -65,15 +68,15 @@ def dots():
         time.sleep(0.3)
 
 def opcion_invalida():
-    error_msj()
-    print('\n*** Opción inválida ***\nTeclea solamente "1" o "0"')
+    mensaje_error()
+    loading_text('\n*** Opción inválida ***\nTeclea solamente "1" o "0"\n')
     time.sleep(1)
     
 #################
+def texto_inicio():
+    loading_text('\n\nEste es un programa que calcúla la distribución de temperatura en un cilindro. \n\nPara iniciar es necesario que definas las dimenciones del cilindro y el número de nodos en cada dirección.\n')
+
 def input_r_z():
-    global R
-    global Z
-    print('\n\nEste es un programa que calcúla la distribución de temperatura en un cilindro. \n\nPara iniciar es necesario que definas las dimenciones del cilindro y el número de nodos en cada dirección.')
     while True:
         R = input('\n¿Cuál es el radio del cilindro? Introduce el valor en cm:  ')
         try:
@@ -87,12 +90,11 @@ def input_r_z():
         except TypeError:
             negative_error()
         except ValueError:
-            error_msj()
-            print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. Por favor ingresa nuevamente el radio.')
-                
+            err_valor_numerico() 
+            loading_text('\nPor favor ingresa nuevamente el radio.\n')
         else:
             while True:
-                Z = input('¿Cual es la altura del clindro? Introduce el valor en cm: ')
+                Z = input('\n¿Cual es la altura del clindro? Introduce el valor en cm: ')
                 try:
                     Z = float(Z)
                     if Z < 0:
@@ -104,23 +106,24 @@ def input_r_z():
                 except TypeError:
                     negative_error()
                 except ValueError:
-                    error_msj()
-                    print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. Por favor ingresa nuevamente el radio.')
+                    err_valor_numerico()
+                    loading_text('\nPor favor ingresa nuevamente la altura.\n')
             
                 else:                  
                     break
                 
             time.sleep(1)
-            print('\nEl radio del cilindro es de:', R, 'cm y la altura es de:' , Z,'cm\n') 
+            print('\nEl radio del cilindro es de: ' + str(R) + ' cm y la altura es de: '  + str(Z) + ' cm\n') 
             break
-    
+    return R, Z
+
 ##################
 def input_N_M():
-    global N, M
-    opcion = True
-    while opcion == True:
+    menu_opcion = True
+    while menu_opcion == True:
+
         opcion = input('\n¿Quieres el mismo nùmero de nodos en la dirección r y z? ' + options)
-        
+
         if opcion == '1':
             while True:
                 N = input('\n¿Cuantos nodos quieres en cada dirección? ')
@@ -138,24 +141,21 @@ def input_N_M():
                     if err == 0:
                         zero_error()
                     elif err == 1:
-                        print('El valor tiene que ser mayor a 1')
+                        loading_text('El valor tiene que ser mayor a 1\n')
                 except TypeError:
                     negative_error()
                 except ValueError:
-                    error_msj()
-                    print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. Por favor ingresa nuevamente el número de nodos en dirección r.')
+                    err_valor_numerico() 
+                    loading_text('Por favor ingresa nuevamente el número de nodos en dirección r.')
                 else:
                     opcion = False
                     M = N
-                    break
-            time.sleep(0.5)
-            print('\n\nEl sistema se dividirá en:', N, 'nodos en la dirección r y z, dando un total de:',N*M, 'nodos\n')
-            time.sleep(1)
+                    break   
             break
-        
+
         elif opcion == '0':
             while True:
-                N = input('¿Cuantos nodos quieres en la dirección r?\n')
+                N = input('\n¿Cuantos nodos quieres en la dirección r?\n')
                 try:
                     N = int(N)
                     if N < 0:
@@ -170,16 +170,16 @@ def input_N_M():
                     if err == 0:
                         zero_error()
                     elif err == 1:
-                        print('El valor tiene que ser mayor a 1')
+                        loading_text('\El valor tiene que ser mayor a 1\n')
                 except TypeError:
                     negative_error()             
                 except ValueError:
-                    error_msj()
-                    print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. Por favor ingresa nuevamente el número de nodos en dirección r.')
+                    err_valor_numerico()
+                    loading_text('\nPor favor ingresa nuevamente el número de nodos en dirección r.\n')
                 else:
                     opcion = False
                     while True:
-                        M = input('¿Cuantos nodos quieres en la dirección z?\n')
+                        M = input('\n¿Cuantos nodos quieres en la dirección z?\n')
                         try:
                             M = int(M)
                             if M < 0:
@@ -194,26 +194,30 @@ def input_N_M():
                             if err == 0:
                                 zero_error()
                             elif err == 1:
-                                print('El valor tiene que ser mayor a 1')
+                                loading_text('\nEl valor tiene que ser mayor a 1\n')
                         except TypeError:
                             negative_error()
                         except ValueError:
-                            error_msj()
-                            print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. Por favor ingresa nuevamente el número de nodos en dirección z.')
+                            err_valor_numerico() 
+                            loading_text('\nPor favor ingresa nuevamente el número de nodos en dirección z.\n')
                         else:
                             break
-                    print('El sistema se dividirá en:', N, 'nodos en la dirección r y',M, 'nodos en la dirección z dando un total de:',N*M, 'nodos\n')
-                    time.sleep(1)
-                    opcion ='a*2'
                     break
+                break
+            break    
         else:
             opcion_invalida()
+    time.sleep(0.5)
+    print('\nEl sistema se dividirá en:', N, 'nodos en la dirección r y z, dando un total de:',N*M, 'nodos\n')
+    time.sleep(1)
+    return N,M
+    
 
 #########
+
 def show_deltat_tab():
     opcion = True
     while opcion == True:
-        print()
         inp_opcion = input('\n¿Quieres ver una tabla con los valores de delta t? ' + options)
         if inp_opcion == '1':
             print(df_deltat)
@@ -224,16 +228,19 @@ def show_deltat_tab():
         else:
             opcion_invalida()
 
+    
+
 def save_deltat_tab():
     path_file_deltat = folder_tablas + r'\deltat_'
     opcion = True
     while opcion == True:
-        inp_opcion = input('\n\n¿Quieres guardar la tabla de delta t? ' + options)
-        if inp_opcion == '1':
+        inp_opcion = input('\n¿Quieres guardar la tabla de delta t? ' + options)
 
+        if inp_opcion == '1':
             df_deltat.to_csv(path_file_deltat+dia+'.csv',encoding='utf-8')
             print('\nSe ha creado un archivo de estas tabla en el directorio: ', folder_tablas + '\\')
             opcion = False
+
         elif inp_opcion == '0':
             opcion = False
             pass
@@ -243,7 +250,7 @@ def save_deltat_tab():
 ##########
         
 def input_mat_prop():
-    print('\nBién, ahora en necesario que definas las propiedades del material. Es importante que las captures en unidades mks e ingresando solo valores numericos. ')
+    print('\nBién. Ahora en necesario que definas las propiedades del material. Es importante que las captures en unidades mks e ingresando solo valores numericos. ')
     time.sleep(1)
 
     while True:
@@ -259,8 +266,8 @@ def input_mat_prop():
         except TypeError:
             negative_error()
         except ValueError:
-            error_msj()
-            print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. \nPor favor ingresa nuevamente la constante de conductividad del material..')
+            err_valor_numerico()
+            loading_text('\nPor favor ingresa nuevamente la constante de conductividad del material.\n')
                 
         else:
             while True:
@@ -276,8 +283,8 @@ def input_mat_prop():
                 except TypeError:
                     negative_error()
                 except ValueError:
-                    error_msj()
-                    print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. \nPor favor ingresa nuevamente la densidad del material.')
+                    err_valor_numerico()
+                    loading_text('\nPor favor ingresa nuevamente la densidad del material.\n')
             
                 else:
                     while True:
@@ -293,8 +300,8 @@ def input_mat_prop():
                         except TypeError:
                             negative_error()
                         except ValueError:
-                            error_msj()
-                            print('\nTu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. \nPor favor ingresa nuevamente el valor del cp del material.')
+                            err_valor_numerico()
+                            loading_text('\nPor favor ingresa nuevamente el valor del cp del material.\n')
                                 
                         else:
                             break
@@ -304,6 +311,7 @@ def input_mat_prop():
                     break
             break
     return k, rho, cp, alpha
+
 #################
 def show_error():
     err_r_e = ((R - r_e_d[0][-1]) / R)
@@ -325,7 +333,7 @@ def show_error():
     time.sleep(1)
 ################
     
-def show_tables():
+def mostrar_tablas_discretizacion():
     opcion = True
     while opcion == True:
         menu = input('\n¿Quieres ver alguna tabla de las dimenciones de la discretizacion?' + options)
@@ -368,8 +376,8 @@ def show_tables():
                     print('\nTabla Volumen de nodos [cm^3]\n',df_Vol)
                     time.sleep(1)
                 else:
-                    error_msj()
-                    print('\nPor favor selecciona una opción válida')
+                    mensaje_error()
+                    loading_text('\nPor favor selecciona una opción válida')
                     time.sleep(1)
         elif menu == '0':
             pass
@@ -377,7 +385,7 @@ def show_tables():
         else:
             opcion_invalida()  
             
-def save_tables():
+def guardar_tablas_discretizacion():
     
     path_file_tab = folder_tablas + r'\disc_'
     opcion = True
@@ -386,7 +394,6 @@ def save_tables():
     
         if menu == '1':
             opcion = False
-            print(opcion)
             opcion1 = True
             while opcion1 == True:
                 opcion2 = input('¿Para que dato quieres guardar la información de la tabla? \n1.- Todos \n2.- Radio externo \n3.- Área interna \n4.- Área externa \n5.- Área de las tapas  \n6.- Volumen\n' )
@@ -419,7 +426,7 @@ def save_tables():
                     df_Vol.to_csv(path_file_tab,encoding='utf-8')
                     print('\nSe ha creado un archivo de esta tabla en el directorio: ', folder_tablas + '\\')
                 else:
-                    error_msj()
+                    mensaje_error()
                     print('\nPor favor selecciona una opción válida')
         elif menu == '0':
             pass
@@ -451,54 +458,48 @@ def check_float(tiempo):
             
 ##################
 def find_time_value():
-    global times
-    global idx
-    global near_times
-    global t_fin
-    times = []
+    tiempos = []
     idx = []
     near_times = []
     t_sol = []
     t = 0
-    punto = '.'
     test_0 = False
     flotante = ' '
     
     while True:
-        cuantas = input('\n¿Para cuantos tiempos deseas ver la información (tablas y mapeo de temperaturas)? ')
+        tiempos = input('\n¿Para cuantos tiempos deseas ver la información (tablas y mapeo de temperaturas)? ')
         try:
             try:
-                for i in cuantas:
-                    if punto in cuantas:
-                        test = float(cuantas)
+                for i in tiempos:
+                    if '.' in tiempos:
+                        test = float(tiempos)
                         flotante = 'flotante'
             except ValueError:
                         flotante = 'string'
-            cuantas = int(cuantas)
-            if cuantas < 0:
+            tiempos = int(tiempos)
+            if tiempos < 0:
                 raise TypeError
-            if cuantas == 0:
+            if tiempos == 0:
                 test_0 = True
                 raise ValueError
         except TypeError:
             negative_error()
         except ValueError:
             if test_0 == True:
-                error_msj()
+                mensaje_error()
                 print('El valor no puede ser cero')
             elif flotante == 'flotante':
-                error_msj()
+                mensaje_error()
                 print('Ingresa solo numeros Enteros')
             else:
-                error_msj()
-                print('Tu tipo de dato no es vàlido \nDebes ingresar solo caracteres numericos. Por favor ingresa nuevamente el número de tiempos de los que requieres ver la información.')
-                         
+                err_valor_numerico()
+                loading_text('\nPor favor ingresa nuevamente el número de tiempos de los que requieres ver la información.\n')
         else:
             break
         pass
     
-    values = list(range(1,cuantas+1))
-    for i in values:
+    valores = list(range(1, tiempos + 1))
+    for i in valores:
         while True:
             tiempo = input('\nIngresa el valor ' + str(i)+': ')
             try:
@@ -508,16 +509,16 @@ def find_time_value():
             except TypeError:
                 negative_error()
             except ValueError:
-                error_msj()
-                print('Tu tipo de dato no es valido \nDebes ingresar solo caracteres numericos. Por favor ingresa nuevamente el tiempo del que requieres la informacón.')
+                err_valor_numerico()
+                loading_text('\nPor favor ingresa nuevamente el tiempo del cual requieres la informacón.\n')
             else:
-                times.append(tiempo)
+                tiempos.append(tiempo)
                 break
             pass
-    times.sort()
-    print('\nSe mostraran las graficas de temperatura a los tiempos más cercanos a: ',times,'segundos\n')
+    tiempos.sort()
+    print('\nSe mostraran las graficas de temperatura a los: ',tiempos,'segundos\n')
         
-    t_fin = max(times)
+    t_fin = max(tiempos)
     
     while t < t_fin:
         t = t + deltat
@@ -525,11 +526,13 @@ def find_time_value():
         t_sol.append(t)
     array = np.asarray(t_sol)
     
-    for tiempo in times:
+    for tiempo in tiempos:
         idx.append(np.abs(array - tiempo).argmin())
     for i in idx:
         near_times.append(t_sol[i])
     dots()
+
+    return tiempos, idx, near_times, t_fin
 # =============================================================================
 #     for i in idx:
 #         near_times.append(round(t_sol[i]))
@@ -540,20 +543,20 @@ def find_time_value():
 
 ###################
 def time_count():
-    global p_t
+    global print_time
     opcion = True
     while opcion == True:
-        t_c = input('\n\n¿Quieres que imprima un conteo del tiempo en la pantalla? ' + options)
-        if t_c == '1':
-            p_t = True
+        contar = input('\n\n¿Quieres que imprima un conteo del tiempo en la pantalla? ' + options)
+        if contar == '1':
+            print_time = True
             opcion = False
             
-        elif t_c == '0':
-            p_t = False
+        elif contar == '0':
+            print_time = False
             opcion = False
         else:
             opcion_invalida()
-            
+    #return print_time        
 
 ####### Condiciones de frontera ###########
 
@@ -711,11 +714,11 @@ def input_condiciones_frontera(lado):
 
 
 ##################
-   
-input_r_z()
-input_N_M()
+texto_inicio()   
+R,Z = input_r_z()
+N, M = input_N_M()
 
-g = 0
+#g = 0
 
 start = time.time()
 
@@ -797,7 +800,6 @@ Vol_d = Vol * 100 ** 3
 
 show_error()     
 
-
 #############
 df_r_e = pd.DataFrame(r_e_d, index = m, columns = n) 
 df_r_i =pd.DataFrame(r_i_d, index = m, columns = n)
@@ -806,8 +808,9 @@ df_A_e = pd.DataFrame(A_e_d, index = m, columns = n)
 df_A_T = pd.DataFrame(A_T_d, index = m, columns = n) 
 df_Vol = pd.DataFrame(Vol_d, index = m, columns = n)
 
-show_tables()
-save_tables()
+mostrar_tablas_discretizacion()
+guardar_tablas_discretizacion()
+
 k, rho, cp, alpha = input_mat_prop()
 
 T_conocida_u, s_T_conocida_u, h_convectivo_u, h_contacto_u, h_radiacion_u, T_fluido_conv_u, T_otra_sup_u, T_alrrededores_u, q_u = input_condiciones_frontera('superior')
@@ -924,7 +927,7 @@ df_deltat.index.name = 'Posición i / j'
 
 show_deltat_tab()
 save_deltat_tab()
-0
+
 change_d_t_otra_sup = False
 while change_d_t_otra_sup == False:
     change_deltat = input('\nEl valor del delta t es de: ' + str(deltat) + ' ¿quieres elegir un delta t diferente?'+ options + '\n')
@@ -954,7 +957,7 @@ while change_d_t_otra_sup == False:
                 elif sw_err == 2:
                     zero_error
                 elif sw_err == 3:
-                    error_msj()
+                    mensaje_error()
                     print('El valor tiene que ser menor a:', deltat, 's')
             
             else:
@@ -996,7 +999,7 @@ for i in range(len(T_lims_list)):
 
 T_t = np.ones((M,N)) * T_inc_k        
 
-find_time_value()
+times, idx, near_tiempos, t_fin = find_time_value()
 
 T_min_max = []
 
@@ -1370,7 +1373,7 @@ while t < t_fin:
         ax_t.append(str(round(float(r_e_d[0][i]),3)))
         ay_t = [round(i*deltaz*100,3) for i in range(M)]
     
-    if p_t == True:
+    if print_time == True:
         print('Tiempo actual =',t,'s')          
             
     if t in near_times: 
