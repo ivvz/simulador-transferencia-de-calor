@@ -13,15 +13,13 @@ options = '\n\n1.- Sí \n0.- No \n\nTeclea la opcion deseda: '
 
 
 def convertir_kelvin(t):
-    kelvin = 273.15
-    t = t + kelvin 
+    t = t + 273
     return t 
+kelvin = 273
 
 
+dia = 'reporte_' + str(date.datetime.now().strftime("%Y_%m_%d_%H_%M_%S"))
 
-dia = date.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-dia = str(dia)
-dia = 'reporte_' + dia
 
 folder_dia = os.path.join(current_directory, dia)
 os.makedirs(folder_dia)
@@ -575,7 +573,7 @@ def input_condiciones_frontera(lado):
                     err_valor_numerico()
                 else:
                     s_T_conocida_lado = True
-                    T_conocida_lado = T_conocida_lado + kelvin
+                    T_conocida_lado = convertir_kelvin(T_conocida_lado) 
                     T_lims_list.append(T_conocida_lado)
                     break
                                         
@@ -612,7 +610,7 @@ def input_condiciones_frontera(lado):
                                 except ValueError:
                                     err_valor_numerico()
                                 else:
-                                    T_otra_sup_lado = T_otra_sup_lado + kelvin
+                                    T_otra_sup_lado = convertir_kelvin(T_otra_sup_lado)
                                     T_lims_list.append(T_otra_sup_lado)
                                     break
                     
@@ -675,7 +673,7 @@ def input_condiciones_frontera(lado):
                                 except ValueError:
                                     err_valor_numerico()
                                 else:
-                                    T_fluido_conv_lado = T_fluido_conv_lado + kelvin
+                                    T_fluido_conv_lado = convertir_kelvin(T_fluido_conv_lado)
                                     T_lims_list.append(T_fluido_conv_lado)
                                     break                               
                                 pass
@@ -697,7 +695,7 @@ def input_condiciones_frontera(lado):
                                 except ValueError:
                                     err_valor_numerico()
                                 else:
-                                    T_alrrededores_lado = T_alrrededores_lado + kelvin
+                                    T_alrrededores_lado = convertir_kelvin(T_alrrededores_lado)
                                     T_lims_list.append(T_alrrededores_lado)
                                     break                               
                             opcion_2_1 = False
@@ -991,11 +989,11 @@ while True:
     else:
         break
     
-T_inc_k = T_inc + kelvin
+T_inc_k = convertir_kelvin(T_inc)
 T_lims_list.append(T_inc_k)
 
 for i in range(len(T_lims_list)):
-    T_lims_list[i] = T_lims_list[i] - kelvin
+    T_lims_list[i] = T_lims_list[i] - 273
 
 T_t = np.ones((M,N)) * T_inc_k        
 
