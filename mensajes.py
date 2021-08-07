@@ -1,5 +1,5 @@
-def pausa():
-    time.sleep(0.5)
+def pausa(tiempo=0.5):
+    time.sleep(tiempo)
     
 def loading_text(texto,tiempo=0.1):
     for i in texto:
