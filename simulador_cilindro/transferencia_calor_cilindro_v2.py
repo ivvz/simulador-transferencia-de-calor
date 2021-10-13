@@ -312,166 +312,12 @@ def time_count():
             mensajes_error.opcion_invalida()
     #return print_time        
 
-####### Condiciones de frontera ###########
-
-def input_condiciones_frontera(lado):            
-    opcion_1 = True
-
-    while opcion_1 == True:
-        es_conocida_T_superficie_lado = input('\n¿La temperatura de la superficie ' + lado + ' es conocida?' + options)
-
-        if es_conocida_T_superficie_lado == '1':
-            while True:
-                T_conocida_lado = input('Teclea la Temperatura en °C: ')
-                try:
-                    T_conocida_lado = float(T_conocida_lado)
-                except ValueError:
-                    mensajes_error.err_valor_numerico()
-                else:
-                    s_T_conocida_lado = True
-                    T_conocida_lado = T_conocida_lado + KELVIN
-                    T_lims_list.append(T_conocida_lado)
-                    break
-                                        
-            h_convectivo_lado = 0
-            T_fluido_conv_lado = 0
-            h_contacto_lado = 0
-            T_otra_sup_lado = 0
-            h_radiacion_lado = 0
-            T_alrrededores_lado = 0
-            q_lado = 0
-            opcion_1 = False
-            
-        elif es_conocida_T_superficie_lado == '0':
-            T_conocida_lado = 0
-            s_T_conocida_lado = False
-            opcion_2 = True
-            while   opcion_2 == True:
-
-                opcion_s_2 = input('¿La frontera ', lado , 'está en contacto con otra superficie?'+ options +'\n')
-
-                if opcion_s_2 == '1':
-                    opcion_2 = True
-                    while True:
-                        h_contacto_lado = input('Teclea el coeficientede contacto en [W/m2]: ')
-                        try:
-                            h_contacto_lado = float(h_contacto_lado)
-                        except ValueError:
-                            mensajes_error.err_valor_numerico()
-                        else:
-                            while True:    
-                                T_otra_sup_lado = input('Teclea la temperatura de la otra superficie en [°C]: ')
-                                try:
-                                    T_otra_sup_lado = float(T_otra_sup_lado)
-                                except ValueError:
-                                    mensajes_error.err_valor_numerico()
-                                else:
-                                    T_otra_sup_lado = T_otra_sup_lado + KELVIN
-                                    T_lims_list.append(T_otra_sup_lado)
-                                    break
-                    
-                            h_convectivo_lado = 0
-                            T_fluido_conv_lado = 0
-                            h_radiacion_lado = 0
-                            T_alrrededores_lado = 0
-                            q_lado = 0
-                            break
-                        
-                    opcion_2 = False
-                    opcion_1 = False
-                
-                elif opcion_s_2 == '0':
-                    opcion_2 = True
-                    opcion_2_1 = True         
-                    while opcion_2_1 == True:
-                        opcion_s_2 = input('¿La frontera de la derecha está aislada?' + options+'\n')
-                        if opcion_s_2 == '1':
-                            
-                            h_convectivo_lado = 0
-                            T_fluido_conv_lado = 0
-                            h_radiacion_lado = 0
-                            T_alrrededores_lado = 0
-                            h_contacto_lado = 0
-                            T_otra_sup_lado = 0
-                            q_lado = 0
-                            
-                            opcion_2_1 = False                                             
-                            opcion_1 = False
-
-                        elif opcion_s_2 == '0':
-                            h_contacto_lado = 0
-                            T_otra_sup_lado = 0
-                            
-                            while True:
-                                q_lado = input('¿Flux de calor en la frontera de la derecha en [W/m^2]? Si es nulo, teclea 0\n')
-                                try:
-                                    q_lado = float(q_lado)
-                                except ValueError:
-                                    mensajes_error.err_valor_numerico()
-                                else:
-                                    break
-                            pass
-                        
-                            while True:
-                                h_convectivo_lado = input('¿Cual es el coeficiente convectivo del fluido en [W/m2]?\n')
-                                try:
-                                    h_convectivo_lado = float(h_convectivo_lado)
-                                except ValueError:
-                                    mensajes_error.err_valor_numerico()
-                                else:
-                                    break                               
-                                pass
-
-                            while True:
-                                T_fluido_conv_lado = input('Cual es la temperatura del fluido en [°C]?\n')
-                                try:
-                                    T_fluido_conv_lado = float(T_fluido_conv_lado)
-                                except ValueError:
-                                    mensajes_error.err_valor_numerico()
-                                else:
-                                    T_fluido_conv_lado = T_fluido_conv_lado + KELVIN
-                                    T_lims_list.append(T_fluido_conv_lado)
-                                    break                               
-                                pass
-
-                            while True:
-                                h_radiacion_lado = input('¿Cual es el coeficiente de radiación en [W/m^2]?\n')
-                                try:
-                                    h_radiacion_lado = float(h_radiacion_lado)
-                                except ValueError:
-                                    mensajes_error.err_valor_numerico()
-                                else:
-                                    break
-                                pass
-
-                            while True:
-                                T_alrrededores_lado = input('Cual es la temperatura de los alrrededores  en [°C]?\n')
-                                try:
-                                    T_alrrededores_lado = float(T_alrrededores_lado)
-                                except ValueError:
-                                    mensajes_error.err_valor_numerico()
-                                else:
-                                    T_alrrededores_lado = T_alrrededores_lado + KELVIN
-                                    T_lims_list.append(T_alrrededores_lado)
-                                    break                               
-                            opcion_2_1 = False
-                        else:
-                            mensajes_error.opcion_invalida()                                                                
-                        opcion_2 = False
-                        opcion_1 = False 
-                else:
-                    mensajes_error.opcion_invalida()  
-                opcion_1 = False
-        else:
-            mensajes_error.opcion_invalida()
-    return  T_conocida_lado, s_T_conocida_lado, h_convectivo_lado, h_contacto_lado, h_radiacion_lado, T_fluido_conv_lado, T_otra_sup_lado, T_alrrededores_lado, q_lado
-
 
 ##################
 #texto_inicio()
    
-R,Z = inputs.input_r_z()
-N, M = inputs.input_N_M()
+R,Z = inputs.set_radio_altura()
+N, M = inputs.set_nodos()
 
 #g = 0
 
@@ -566,6 +412,8 @@ df_Vol = pd.DataFrame(Vol_d, index = m, columns = n)
 mostrar_tablas_discretizacion()
 guardar_tablas_discretizacion()
 
+
+
 k, rho, cp, alpha = inputs.propiedades_termodinamicas()()
 
 T_conocida_u, s_T_conocida_u, h_convectivo_u, h_contacto_u, h_radiacion_u, T_fluido_conv_u, T_otra_sup_u, T_alrrededores_u, q_u = input_condiciones_frontera('superior')
@@ -574,6 +422,8 @@ T_conocida_r, s_T_conocida_r, h_convectivo_r, h_contacto_r, h_radiacion_r, T_flu
 
 T_conocida_l, s_T_conocida_l, h_convectivo_l, h_contacto_l, h_radiacion_l, T_fluido_conv_l, T_otra_sup_l, T_alrrededores_l, q_l = input_condiciones_frontera('inferior')
         
+
+
 ########## Criterios de estabilidad ##########
 deltat_list = np.zeros((M,N))
 deltat_minlist = []

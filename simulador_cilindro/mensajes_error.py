@@ -1,6 +1,6 @@
 import time
   
-def pausa(tiempo=0.5):
+def pausa(tiempo=0.2):
     time.sleep(tiempo)
     
 def loading_text(texto,tiempo=0.1):
@@ -35,3 +35,7 @@ def opcion_invalida():
     mensaje_error()
     loading_text('\n*** Opción inválida ***\nTeclea solamente "1" o "0"\n')
     pausa()
+
+def preguntar_con_opciones(pregunta):
+    eleccion = input(pregunta + '\n\n1.- Sí \n0.- No \n\nTeclea la opcion deseda: ')
+    return eleccion

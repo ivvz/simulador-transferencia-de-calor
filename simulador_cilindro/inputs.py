@@ -6,7 +6,7 @@ options = '\n\n1.- Sí \n0.- No \n\nTeclea la opcion deseda: '
 def texto_inicio():
     mensajes_error.loading_text('\n\nEste es un programa que calcúla la distribución de temperatura en un cilindro. \n\nPara iniciar es necesario que definas las dimenciones del cilindro y el número de nodos en cada dirección.\n')
 
-def radio_altura():
+def set_radio_altura():
     while True:
         R = input('\n¿Cuál es el radio del cilindro? Introduce el valor en cm:  ')
         try:
@@ -18,9 +18,9 @@ def radio_altura():
         except ZeroDivisionError:
             mensajes_error.zero_error()
         except TypeError:
-            mensajes_error.mensajes_error.numero_negativo_invalido()
+            mensajes_error.numero_negativo_invalido()
         except ValueError:
-            mensajes_error.err_valor_numerico() 
+            mensajes_error.error_valor_numerico() 
             mensajes_error.loading_text('\nPor favor ingresa nuevamente el radio.\n')
         else:
             while True:
@@ -34,9 +34,9 @@ def radio_altura():
                 except ZeroDivisionError:
                     mensajes_error.zero_error()
                 except TypeError:
-                   mensajes_error.mensajes_error.numero_negativo_invalido()
+                   mensajes_error.numero_negativo_invalido()
                 except ValueError:
-                  mensajes_error.err_valor_numerico()
+                  mensajes_error.error_valor_numerico()
                   mensajes_error.loading_text('\nPor favor ingresa nuevamente la altura.\n')
             
                 else:                  
@@ -48,7 +48,7 @@ def radio_altura():
     return R, Z
 
 ##################
-def nodos():
+def set_nodos():
     while True:
 
         opcion = input('\n¿Quieres el mismo nùmero de nodos en la dirección r y z? ' + options)
@@ -72,9 +72,9 @@ def nodos():
                     elif err == 1:
                        mensajes_error.loading_text('El valor tiene que ser mayor a 1\n')
                 except TypeError:
-                   mensajes_error.mensajes_error.numero_negativo_invalido()
+                   mensajes_error.numero_negativo_invalido()
                 except ValueError:
-                   mensajes_error.err_valor_numerico() 
+                   mensajes_error.error_valor_numerico() 
                    mensajes_error.loading_text('Por favor ingresa nuevamente el número de nodos en dirección r.')
                 else:
                     opcion = False
@@ -101,9 +101,9 @@ def nodos():
                     elif err == 1:
                         mensajes_error.loading_text('\El valor tiene que ser mayor a 1\n')
                 except TypeError:
-                    mensajes_error.mensajes_error.numero_negativo_invalido()             
+                    mensajes_error.numero_negativo_invalido()             
                 except ValueError:
-                    mensajes_error.err_valor_numerico()
+                    mensajes_error.error_valor_numerico()
                     mensajes_error.loading_text('\nPor favor ingresa nuevamente el número de nodos en dirección r.\n')
                 else:
                     opcion = False
@@ -125,9 +125,9 @@ def nodos():
                             elif err == 1:
                                 mensajes_error.loading_text('\nEl valor tiene que ser mayor a 1\n')
                         except TypeError:
-                            mensajes_error.mensajes_error.numero_negativo_invalido()
+                            mensajes_error.numero_negativo_invalido()
                         except ValueError:
-                            mensajes_error.err_valor_numerico() 
+                            mensajes_error.error_valor_numerico() 
                             mensajes_error.loading_text('\nPor favor ingresa nuevamente el número de nodos en dirección z.\n')
                         else:
                             break
@@ -160,7 +160,7 @@ def propiedades_termodinamicas():
         except TypeError:
             mensajes_error.numero_negativo_invalido()
         except ValueError:
-            mensajes_error.err_valor_numerico()
+            mensajes_error.error_valor_numerico()
             mensajes_error.loading_text('\nPor favor ingresa nuevamente la constante de conductividad del material.\n')
                 
         else:
@@ -177,8 +177,8 @@ def propiedades_termodinamicas():
                 except TypeError:
                     mensajes_error.numero_negativo_invalido()
                 except ValueError:
-                    mensajes_error.err_valor_numerico()
-                    mensajes_error.mensajes_error.loading_text('\nPor favor ingresa nuevamente la densidad del material.\n')
+                    mensajes_error.error_valor_numerico()
+                    mensajes_error.loading_text('\nPor favor ingresa nuevamente la densidad del material.\n')
             
                 else:
                     while True:
@@ -187,15 +187,15 @@ def propiedades_termodinamicas():
                             cp = float(cp)
                             if cp < 0:
                                 raise TypeError
-                            elif N == 0:
+                            elif cp == 0:
                                 raise ZeroDivisionError
                         except ZeroDivisionError:
-                            mensajes_error.mensajes_error.mensajes_error.mensajes_error.zero_error()   
+                            mensajes_error.zero_error()   
                         except TypeError:
                             mensajes_error.numero_negativo_invalido()
                         except ValueError:
-                            mensajes_error.err_valor_numerico()
-                            mensajes_error.mensajes_error.loading_text('\nPor favor ingresa nuevamente el valor del cp del material.\n')
+                            mensajes_error.error_valor_numerico()
+                            mensajes_error.loading_text('\nPor favor ingresa nuevamente el valor del cp del material.\n')
                                 
                         else:
                             break
